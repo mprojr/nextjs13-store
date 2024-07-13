@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,7 +12,25 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
+      </head>
+      <body className={'min-h-screen flex flex-col relative' + inter.className}>
+        <header className="sticky top-0 p-6 bg-white border-b border-solid border-blue-900 shadow-md z-50 text-2xl sm:text-3xl md:text-4xl sm:p-8 flex item-center justify-between">
+          <Link href={'/'}>
+            <h1 className="uppercase cursor-pointer hover:scale-105">Fruit Shop</h1>
+          </Link>
+          <i class="fa-solid cursor-pointer hover:text-slate-500 fa-cart-shopping"></i>
+        </header>
+        <div className="flex-1">
+          {children}
+        </div>
+        <footer className="flex items-center flex-wrap justify-center border-t border-solid border-slate-300 p-4 md:p-8">
+          <Link href={'https://wwww.instagram.com/marxti.n'} target="_blank">
+            <i className="fa-brands fa-instagram text-slate-700 hover:text-slate-500 cursor-pointer text-2xl sm:text-3xl"></i>
+          </Link>
+        </footer>
+      </body>
     </html>
   );
 }
