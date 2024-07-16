@@ -14,6 +14,7 @@ export default function Modal() {
   const openModal = useCart(state => state.openModal);
   const closeModal = useCart(state => state.setOpenModal);
   const cartItems = useCart(state => state.cart);
+  const removeItemFromCart = useCart(state => state.removeItemFromCart);
   const router = useRouter();
 
   if (!isMounted || !openModal) {
@@ -60,12 +61,16 @@ export default function Modal() {
           ) : (
             <>
               {cartItems.map((cartItem, itemIndex) => (
-                <div key={itemIndex} className='flex border-l border-solid border-slate-700 px-2 flex-col gap-2'>
+                <div key={itemIndex} className='flex border-l border-solid border-slate-700 px-2 flex-col gap-2 relative group'>
                   <div className='flex items-center justify-between'>
                     <h2>{cartItem.name}</h2>
                     <p>${cartItem.cost / 100}</p>
                   </div>
                   <p className='text-slate-600 text-sm'>Quantity: 1</p>
+                  <i
+                    onClick={() => removeItemFromCart({ itemIndex })}
+                    className="fa-solid px-4 fa-x cursor-pointer text-red-500 absolute bottom-1 right-1 transition-opacity opacity-0 group-hover:opacity-100"
+                  ></i>
                 </div>
               ))}
             </>
