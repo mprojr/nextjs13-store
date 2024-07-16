@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import useCart from './(store)/store';
+import { useRouter } from 'next/navigation';
 
 export default function Modal() {
   const [isMounted, setIsMounted] = useState(false);
@@ -10,11 +11,31 @@ export default function Modal() {
     setIsMounted(true);
   }, []);
 
-  const openModal = useCart(state => state.openModal)
-  const closeModal = useCart(state => state.setOpenModal)
+  const openModal = useCart(state => state.openModal);
+  const closeModal = useCart(state => state.setOpenModal);
+  const cartItems = useCart(state => state.cart);
+  const router = useRouter();
 
   if (!isMounted || !openModal) {
     return null;
+  }
+
+  async function checkout() {
+    const lineItems = cartItems.map(cartItem => ({
+      price: cartItem.price_id,
+      quantity: 1
+    }));
+
+    const res = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ lineItems }),
+    });
+
+    const data = await res.json();
+    router.push(data.session.url);
   }
 
   const portalElement = document.getElementById('portal');
@@ -33,8 +54,27 @@ export default function Modal() {
           <i onClick={closeModal} className="fa-solid cursor-pointer hover:opacity-60 fa-x"></i>
           <div className='absolute bottom-0 left-1/2 -translate-x-1/2 h-[1px] bg-slate-300 w-2/3'></div>
         </div>
+        <div className='p-4 overflow-scroll flex-1 flex flex-col gap-4'>
+          {cartItems.length === 0 ? (
+            <p>There is nothing in your cart.</p>
+          ) : (
+            <>
+              {cartItems.map((cartItem, itemIndex) => (
+                <div key={itemIndex} className='flex border-l border-solid border-slate-700 px-2 flex-col gap-2'>
+                  <div className='flex items-center justify-between'>
+                    <h2>{cartItem.name}</h2>
+                    <p>${cartItem.cost / 100}</p>
+                  </div>
+                  <p className='text-slate-600 text-sm'>Quantity: 1</p>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
+        <div onClick={checkout} className='border border-solid border-slate-700 text-xl m-4 p-8 uppercase grid place-items-center hover:opacity-60 cursor-pointer'>
+          Checkout
+        </div>
       </div>
-
     </div>,
     portalElement
   );
