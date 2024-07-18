@@ -9,7 +9,6 @@ export const metadata = {
 import { Inter } from 'next/font/google'
 import Link from 'next/link'
 import Header from './Header'
-import Entrance from './Entrance'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,7 +21,6 @@ export default function RootLayout({ children }) {
       </head>
       <body className={'min-h-screen flex flex-col relative ' + inter.className}>
         <Header />
-        <Entrance />
         <div className='flex-1'>
           {children}
         </div>
