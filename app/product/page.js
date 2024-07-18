@@ -1,30 +1,33 @@
-"use client"
-import useCart from "../(store)/store"
+"use client";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import useCart from "../(store)/store";
 
 export default function ProductPage(props) {
-    const { searchParams } = props
-    const { price_id } = searchParams
-    const product = useCart(state => state.product)
-    const addItemToCart = useCart(state => state.addItemToCart)
-    const { cost, productInfo, name, description } = product
+    const { searchParams } = props;
+    const { price_id } = searchParams;
+    const product = useCart(state => state.product);
+    const addItemToCart = useCart(state => state.addItemToCart);
+    const { cost, productInfo, name, description } = product;
 
-    console.log(productInfo)
+    const router = useRouter();
 
-    if (!product?.name) {
-        window.location.href = '/'
-    }
+    useEffect(() => {
+        if (!product?.name) {
+            router.push('/');
+        }
+    }, [product, router]);
 
     function handleAddToCart() {
-        console.log('PRICE ID: ', price_id)
+        console.log('PRICE ID: ', price_id);
         const newItem = {
             quantity: 1,
             price_id,
             name,
             cost
-        }
-        addItemToCart({ newItem })
+        };
+        addItemToCart({ newItem });
     }
-
 
     return (
         <div className="flex flex-col p-4">
@@ -42,5 +45,5 @@ export default function ProductPage(props) {
                 </div>
             </div>
         </div>
-    )
+    );
 }
