@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import useCart from './(store)/store'
 
 export default function ProductCard(props) {
-  const { product } = props
+  const { product, showPrice = true } = props // Default to true if not provided
   const {id: price_id, unit_amount: cost, product: productInfo} = product
   const { name, description } = productInfo
 
@@ -35,11 +35,11 @@ export default function ProductCard(props) {
       <div className='flex flex-col gap-2 p-4'>
         <div className='flex items-center justify-between'>
           <h3>{name}</h3>
-          <p>${cost/100}</p>
+          {showPrice && <p>${cost/100}</p>} {/* Conditionally render price */}
         </div>
         <button 
           onClick={onButtonClick} 
-          className='mt-4 py-2 px-4 bg-blue-400 text-white rounded hover:bg-blue-200'
+          className='mt-4 py-2 px-4 bg-[#63adb8] text-white rounded hover:bg-blue-200'
         >
           Learn More
         </button>
