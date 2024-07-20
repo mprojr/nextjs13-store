@@ -11,7 +11,7 @@ export default function Header() {
   console.log(cartItems)
   return (
     <div>
-      <header className="sticky top-0 p-6 bg-white border-b border-solid border-blue-900 shadow-md z-50 text-2xl sm:text-3xl md:text-4xl sm:p-8 flex item-center justify-between">
+      <header className="sticky top-0 p-6 bg-[#f2f4f6] border-b border-solid border-blue-900 shadow-md z-50 text-2xl sm:text-3xl md:text-4xl sm:p-8 flex item-center justify-between">
       {setOpenModal && (
         <Modal />
       )}

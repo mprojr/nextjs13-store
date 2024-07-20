@@ -29,15 +29,36 @@ export default async function Home() {
         <p className="text-center text-gray-600 mb-8">Explore our unique handcrafted rings perfect for any occasion.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {featuredProducts.map((product, productIndex) => (
-            <ProductCard key={productIndex} product={product} showPrice={false} /> // Pass showPrice={false}
+            <ProductCard key={productIndex} product={product} showPrice={false} />
           ))}
         </div>
         <div className="mt-8 flex justify-center">
-          <Link href="/projects-list" className="text-blue-500 hover:text-blue-700 text-lg font-semibold">
+          <Link href="/projects-list" className="py-4 m-2 text-[#649d9d] hover:text-[#336f6f] text-lg font-semibold">
             Browse More
           </Link>
         </div>
       </div>
+
+      {/* Customer Testimonials Section */}
+      <section className="mt-10 bg-[#c1e0e5] py-10 w-full">
+        <div className=''>
+          <h2 className="text-4xl font-bold text-center mb-6 text-gray-800">Customer Testimonials</h2>
+          <div className="flex flex-col items-center space-y-6">
+            <blockquote className="max-w-lg text-center">
+              <p className="text-lg italic">"Absolutely stunning! The quality is amazing and the service was impeccable."</p>
+              <footer className="mt-4">- Jane Doe</footer>
+            </blockquote>
+            <blockquote className="max-w-lg text-center">
+              <p className="text-lg italic">"I love my new ring! It's exactly what I was looking for. Thank you!"</p>
+              <footer className="mt-4">- John Smith</footer>
+            </blockquote>
+            <blockquote className="max-w-lg text-center">
+              <p className="text-lg italic">"Fantastic craftsmanship and great customer support. Highly recommend."</p>
+              <footer className="mt-4">- Emily Brown</footer>
+            </blockquote>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
