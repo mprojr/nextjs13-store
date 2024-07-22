@@ -4,7 +4,7 @@ import React from 'react';
 export default function Entrance() {
   return (
     <div className='w-full min-h-screen'>
-      <div className='bg-gradient-to-br from-[#e6afd9] to-[#d0b8cb] w-full min-h-screen flex sm:items-center items-start'>
+      <div className='bg-gradient-to-br from-[#e6afd9] to-[#d0b8cb] w-full min-h-[120vh] flex sm:items-center items-start'>
         <div className='flex flex-col sm:flex-row w-full items-center sm:justify-between justify-start'>
           <div className='flex-1 max-h-screen flex items-center justify-center p-4'>
             <Image src='/img/Pic1.png' alt='lovely ring' width={500} height={500} className='max-h-[100vh] object-contain shadow-lg duration-500' draggable="false"/>
