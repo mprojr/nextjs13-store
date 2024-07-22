@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Image from 'next/image';
 
 export function Avatar({ children, className, ...props }) {
   return (
@@ -11,7 +12,7 @@ export function Avatar({ children, className, ...props }) {
 }
 
 export function AvatarImage({ src, alt, ...props }) {
-  return <img src={src} alt={alt} className="w-full h-full object-cover" {...props} />;
+  return <Image src={src} alt={alt} height={500} width={500} className="w-full h-full object-cover" {...props} />;
 }
 
 export function AvatarFallback({ children, ...props }) {
