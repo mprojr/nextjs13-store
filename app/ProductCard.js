@@ -2,6 +2,7 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import useCart from './(store)/store'
+import Image from 'next/image'
 
 export default function ProductCard(props) {
   const { product, showPrice = true } = props // Default to true if not provided
@@ -31,7 +32,7 @@ export default function ProductCard(props) {
 
   return (
     <div onClick={onProductClick} className='flex flex-col shadow bg-white hover:shadow-lg cursor-pointer'>
-      <img src={productInfo.images[0]} alt={name} className='w-full h-full object-cover p-2'/>
+      <Image src={productInfo.images[0]} alt={name} width={500} height={500} className='w-full h-full object-cover p-2'/>
       <div className='flex flex-col gap-2 p-4'>
         <div className='flex items-center justify-between'>
           <h3>{name}</h3>

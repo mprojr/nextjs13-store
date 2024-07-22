@@ -16,7 +16,9 @@ export default function Header() {
         <Modal />
       )}
       <Link href={'/'}>
-        <h1 className="uppercase cursor-pointer text-2xl hover:scale-105">Timeless <span className=''>Rose</span></h1>
+        <h1 className="uppercase cursor-pointer text-2xl hover:text-[#dbb3d1] hover:scale-105 transition-all duration-300">
+          Timeless Rose
+        </h1>
       </Link>
       <div onClick={setOpenModal} className='relative cursor-pointer group grid place-items-center'>
         {cartItems.length > 0 && (

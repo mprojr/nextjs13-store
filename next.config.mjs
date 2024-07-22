@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    domains: ['files.stripe.com'],
+  },
   webpack: (config, { isServer }) => {
     // Add a rule for handling images
     config.module.rules.push({

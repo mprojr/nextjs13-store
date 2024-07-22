@@ -45,15 +45,15 @@ export default async function Home() {
           <h2 className="text-4xl font-bold text-center mb-6 text-gray-800">Customer Testimonials</h2>
           <div className="flex flex-col items-center space-y-6">
             <blockquote className="max-w-lg text-center">
-              <p className="text-lg italic">"Absolutely stunning! The quality is amazing and the service was impeccable."</p>
+              <p className="text-lg italic">&quot;Absolutely stunning! The quality is amazing and the service was impeccable.&quot;</p>
               <footer className="mt-4">- Jane Doe</footer>
             </blockquote>
             <blockquote className="max-w-lg text-center">
-              <p className="text-lg italic">"I love my new ring! It's exactly what I was looking for. Thank you!"</p>
+              <p className="text-lg italic">&quot;I love my new ring! It&apos;s exactly what I was looking for. Thank you!&quot;</p>
               <footer className="mt-4">- John Smith</footer>
             </blockquote>
             <blockquote className="max-w-lg text-center">
-              <p className="text-lg italic">"Fantastic craftsmanship and great customer support. Highly recommend."</p>
+              <p className="text-lg italic">&quot;Fantastic craftsmanship and great customer support. Highly recommend.&quot;</p>
               <footer className="mt-4">- Emily Brown</footer>
             </blockquote>
           </div>
