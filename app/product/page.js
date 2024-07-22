@@ -71,7 +71,7 @@ export default function ProductPage(props) {
                             <ShieldCheckIcon className="w-8 h-8 text-primary" />
                             <div>
                                 <h3 className="text-xl font-bold">30-Day Money Back</h3>
-                                <p className="text-muted-foreground">If you're not satisfied, we'll refund your purchase.</p>
+                                <p className="text-muted-foreground">If you&apos;re not satisfied, we&apos;ll refund your purchase.</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-4">
@@ -134,7 +134,7 @@ export default function ProductPage(props) {
                                             </div>
                                         </div>
                                         <p className="text-muted-foreground text-sm mt-2">
-                                            This necklace is absolutely stunning! The pearls are so beautiful and the quality is amazing. I've received so many compliments on it.
+                                            This necklace is absolutely stunning! The pearls are so beautiful and the quality is amazing. I&apos;ve received so many compliments on it.
                                         </p>
                                     </div>
                                 </div>
@@ -155,7 +155,7 @@ export default function ProductPage(props) {
                                             </div>
                                         </div>
                                         <p className="text-muted-foreground text-sm mt-2">
-                                            I'm really happy with this purchase. The necklace is well-made and the pearls are of high quality. The only downside is that the clasp can be a bit tricky to maneuver, but overall it's a great product.
+                                            I&apos;m really happy with this purchase. The necklace is well-made and the pearls are of high quality. The only downside is that the clasp can be a bit tricky to maneuver, but overall it&apos;s a great product.
                                         </p>
                                     </div>
                                 </div>
