@@ -5,12 +5,17 @@ import useCart from "../(store)/store";
 import Image from 'next/image';
 import { Button } from '../components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar';
-import Link from "next/link";
 
 export default function ProductPage() {
     const searchParams = useSearchParams();
     const productId = searchParams.get('productId');
     const [product, setProduct] = useState(null);
+    const [reviews, setReviews] = useState([]);
+    const [name, setName] = useState('');
+    const [review, setReview] = useState('');
+    const [rating, setRating] = useState(5);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
     const addItemToCart = useCart(state => state.addItemToCart);
     const router = useRouter();
 
@@ -42,7 +47,61 @@ export default function ProductPage() {
         fetchProduct();
     }, [productId, router]);
 
-    function handleAddToCart() {
+    useEffect(() => {
+        async function fetchReviews() {
+            try {
+                const res = await fetch(`/api/reviews?productId=${productId}`);
+                if (!res.ok) {
+                    throw new Error(`Error: ${res.status}`);
+                }
+                const data = await res.json();
+                setReviews(data.reviews);
+            } catch (error) {
+                console.error('Error fetching reviews:', error);
+            }
+        }
+
+        fetchReviews();
+    }, [productId]);
+
+    async function handleSubmitReview(e) {
+      e.preventDefault();
+      
+      setIsSubmitting(true);
+      
+      console.log('Submitting review with data:', { productId, name, review, rating });
+  
+      try {
+          const res = await fetch('/api/reviews', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ productId, name, review, rating }),
+          });
+  
+          console.log('Response status:', res.status);
+          setIsReviewSubmitted(true);
+  
+          if (res.ok) {
+              const newReview = await res.json();
+              console.log('New review added:', newReview);
+              setReviews([...reviews, newReview.review]);
+              setName('');
+              setReview('');
+              setRating(5);
+          } else {
+              const errorData = await res.json();
+              console.error('Failed to submit review:', errorData);
+          }
+      } catch (error) {
+          console.error('Error submitting review:', error);
+      } finally {
+          setIsSubmitting(false); // Set submitting state to false
+      }
+  }  
+
+  function handleAddToCart() {
         if (!product) {
             console.error('Product data is missing');
             return;
@@ -62,7 +121,7 @@ export default function ProductPage() {
         return <div>Loading...</div>; // Provide a loading state while fetching data
     }
 
-    const { unit_amount, name, description, images = [], metadata = {} } = product;
+    const { unit_amount, name: productName, description, images = [], metadata = {} } = product;
 
     console.log('Product:', product);
 
@@ -77,7 +136,7 @@ export default function ProductPage() {
                     <div className="flex flex-col gap-6">
                         <Image
                             src={images[0]}
-                            alt={name}
+                            alt={productName}
                             width={600}
                             height={600}
                             className="w-full h-auto rounded-lg object-cover"
@@ -85,14 +144,14 @@ export default function ProductPage() {
                     </div>
                     <div className="flex flex-col gap-6">
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-bold">{name}</h1>
+                            <h1 className="text-3xl md:text-4xl font-bold">{productName}</h1>
                             <p className="text-muted-foreground text-lg mt-2">{description}</p>
                         </div>
                         <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
                             <h2 className="text-3xl font-sans">${unit_amount / 100}</h2>
                             <Button size="lg" onClick={handleAddToCart} className={'ml-auto'}>Add to Cart</Button>
                         </div>
-                        <div className="flex items-center gap-2 gap-4">
+                        <div className="flex items-center gap-4">
                             <ShieldCheckIcon className="w-6 h-6 text-green-500" />
                             <span className="text-muted-foreground">30-day money back guarantee</span>
                         </div>
@@ -100,21 +159,21 @@ export default function ProductPage() {
                 </section>
                 <section className="bg-[#c1dfe5] py-12 md:py-24">
                     <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="flex items-center gap-2 gap-4">
+                        <div className="flex items-center gap-4">
                             <ShieldCheckIcon className="w-8 h-8 text-primary" />
                             <div>
                                 <h3 className="text-xl font-bold">30-Day Money Back</h3>
                                 <p className="text-muted-foreground">If you&apos;re not satisfied, we&apos;ll refund your purchase.</p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2 gap-4">
+                        <div className="flex items-center gap-4">
                             <TruckIcon className="w-8 h-8 text-primary" />
                             <div>
                                 <h3 className="text-xl font-bold">Free Shipping</h3>
                                 <p className="text-muted-foreground">We offer free shipping on all orders.</p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2 gap-4">
+                        <div className="flex items-center gap-4">
                             <LockIcon className="w-8 h-8 text-primary" />
                             <div>
                                 <h3 className="text-xl font-bold">Secure Checkout</h3>
@@ -124,7 +183,7 @@ export default function ProductPage() {
                     </div>
                 </section>
                 <section className="max-w-6xl mx-auto px-4 py-12 md:py-24">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 gap-8">
                         <div>
                             <h2 className="text-3xl md:text-4xl font-bold">Product Details</h2>
                             <p className="text-muted-foreground text-lg mt-4">{description}</p>
@@ -148,52 +207,73 @@ export default function ProductPage() {
                             </ul>
                         </div>
                         <div>
-                            <h2 className="text-3xl md:text-4xl font-bold">Customer Reviews</h2>
-                            <div className="mt-6 space-y-6">
-                                <div className="flex items-start gap-4">
-                                    <Avatar className="w-10 h-10 border">
-                                        <AvatarImage src="/placeholder-user.jpg" />
-                                        <AvatarFallback>CN</AvatarFallback>
-                                    </Avatar>
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-2 justify-between">
-                                            <h4 className="font-semibold">Sarah Johnson</h4>
-                                            <div className="flex items-center gap-2 gap-0.5 text-primary">
-                                                <StarIcon className="w-5 h-5" />
-                                                <StarIcon className="w-5 h-5" />
-                                                <StarIcon className="w-5 h-5" />
-                                                <StarIcon className="w-5 h-5" />
-                                                <StarIcon className="w-5 h-5" />
-                                            </div>
-                                        </div>
-                                        <p className="text-muted-foreground text-sm mt-2">
-                                            This ring set is beautiful and well-made. My fiancée loves it!
-                                        </p>
-                                    </div>
+                            {isReviewSubmitted ? (
+                                <div className="text-2xl font-bold">
+                                    Thank you for your review!
                                 </div>
-                                <div className="flex items-start gap-4">
-                                    <Avatar className="w-10 h-10 border">
-                                        <AvatarImage src="/placeholder-user.jpg" />
-                                        <AvatarFallback>CN</AvatarFallback>
-                                    </Avatar>
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-2 justify-between">
-                                            <h4 className="font-semibold">Alex Smith</h4>
-                                            <div className="flex items-center gap-2 gap-0.5 text-primary">
-                                                <StarIcon className="w-5 h-5" />
-                                                <StarIcon className="w-5 h-5" />
-                                                <StarIcon className="w-5 h-5" />
-                                                <StarIcon className="w-5 h-5" />
-                                                <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-                                            </div>
+                            ) : (
+                                <div className="mt-6">
+                                    <h3 className="text-2xl font-semibold">Submit a Review</h3>
+                                    <form onSubmit={handleSubmitReview} className="mt-4 space-y-4">
+                                        <div>
+                                            <label className="block text-sm font-medium">Name</label>
+                                            <input
+                                                type="text"
+                                                value={name}
+                                                onChange={(e) => setName(e.target.value)}
+                                                className="block w-full mt-1 border rounded"
+                                                required
+                                            />
                                         </div>
-                                        <p className="text-muted-foreground text-sm mt-2">
-                                            The engagement ring set is stunning. The diamonds are brilliant and the silver band is very elegant.
-                                        </p>
-                                    </div>
+                                        <div>
+                                            <label className="block text-sm font-medium">Review</label>
+                                            <textarea
+                                                value={review}
+                                                onChange={(e) => setReview(e.target.value)}
+                                                className="block w-full mt-1 border rounded"
+                                                required
+                                            ></textarea>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium">Rating</label>
+                                            <select
+                                                value={rating}
+                                                onChange={(e) => setRating(Number(e.target.value))}
+                                                className="block w-full mt-1 border rounded"
+                                                required
+                                            >
+                                                {[5, 4, 3, 2, 1].map((rating) => (
+                                                    <option key={rating} value={rating}>
+                                                        {rating}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit Review'}</Button>
+                                        {isReviewSubmitted && <p className="mt-4 text-green-600">Thank you for your review!</p>}
+                                    </form>
                                 </div>
-                            </div>
+                            )}
                         </div>
+                        <div className="sm:mt-2 mt-6 space-y-6">
+                          <h2 className="text-3xl md:text-4xl font-bold">Customer Reviews</h2>
+                          {reviews.map((review, index) => (
+                              <div key={index} className="p-4 sm:w-3/4 border border-gray-200 rounded-lg shadow-sm bg-white">
+                                  <div className="flex items-center gap-4 mb-4">
+                                      <div className="flex-1">
+                                          <h4 className="text-lg font-semibold">{review.name}</h4>
+                                          <div className="flex items-center gap-1 text-yellow-500">
+                                              {Array.from({ length: review.rating }).map((_, i) => (
+                                                  <StarIcon key={i} className="w-5 h-5" />
+                                              ))}
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <p className="text-gray-700">{review.review}</p>
+                              </div>
+                          ))}
+                      </div>
+
                     </div>
                 </section>
             </main>
