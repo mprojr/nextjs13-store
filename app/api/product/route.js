@@ -5,7 +5,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET ?? '', {
     apiVersion: '2020-08-27',
 });
 
-export async function GET({ searchParams }) {
+export async function GET(request) {
+    const { searchParams } = new URL(request.url);
     const productId = searchParams.get('productId');
 
     console.log('Received productId:', productId); // Log the received productId
