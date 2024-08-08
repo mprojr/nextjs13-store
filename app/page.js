@@ -2,6 +2,7 @@ import Stripe from 'stripe';
 import ProductCard from './ProductCard';
 import Entrance from './Entrance';
 import Link from 'next/link';
+import '../app/globals.css'
 
 async function getStripeProducts() {
   const stripe = new Stripe(process.env.STRIPE_SECRET ?? '', {
