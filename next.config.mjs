@@ -2,8 +2,6 @@
 const nextConfig = {
   images: {
     domains: ['files.stripe.com'],
-    loader: 'imgix',
-    path: '/',
   },
   webpack: (config, { isServer }) => {
     // Add a rule for handling images
@@ -24,8 +22,6 @@ const nextConfig = {
 
     return config;
   },
-  output: 'export',
-  distDir: 'out',
 };
 
 export default nextConfig;
