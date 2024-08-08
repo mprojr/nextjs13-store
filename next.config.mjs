@@ -24,7 +24,7 @@ const nextConfig = {
 
     return config;
   },
-  output: 'standalone',
+  output: 'export',
   distDir: 'out',
 };
 
