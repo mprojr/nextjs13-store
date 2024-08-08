@@ -21,6 +21,7 @@ const nextConfig = {
 
     return config;
   },
+  output: 'export', // Ensure static export
 };
 
 export default nextConfig;
