@@ -19,8 +19,8 @@ export async function POST(request) {
 
         // Create the Stripe checkout session
         const session = await stripe.checkout.sessions.create({
-            success_url: 'http://localhost:3000/success',
-            cancel_url: 'http://localhost:3000/cancel',
+            success_url: 'https://timelessrose.netlify.app/success',
+            cancel_url: 'https://timelessrose.netlify.app/cancel',
             line_items: body.lineItems,  // Pass the dynamically fetched line items
             mode: 'payment'
         });
