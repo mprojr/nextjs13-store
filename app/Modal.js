@@ -21,23 +21,63 @@ export default function Modal() {
     return null;
   }
 
-  async function checkout() {
-    const lineItems = cartItems.map(cartItem => ({
-      price: cartItem.price_id,
-      quantity: 1
-    }));
-
-    const res = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ lineItems }),
-    });
-
-    const data = await res.json();
-    router.push(data.session.url);
+  // Function to fetch price_id dynamically for each cart item during checkout
+  async function fetchPriceId(productId) {
+    try {
+      const res = await fetch(`/api/product?productId=${productId}`);
+      const data = await res.json();
+      if (!data.default_price) {
+        console.error(`No default_price found for productId: ${productId}`);
+        return null;
+      }
+      return data.default_price; // Return the default price (price_id)
+    } catch (error) {
+      console.error(`Error fetching price for productId: ${productId}`, error);
+      return null; // Handle fetch error
+    }
   }
+
+  async function checkout() {
+    try {
+      // Fetch price_ids for all cart items just before checkout
+      const lineItems = await Promise.all(
+        cartItems.map(async (cartItem) => {
+          const price_id = await fetchPriceId(cartItem.productId); // Fetch price_id dynamically
+          if (!price_id) {
+            throw new Error(`Missing price_id for product: ${cartItem.name}`);
+          }
+          return {
+            price: price_id,  // Use the fetched price_id
+            quantity: cartItem.quantity || 1,
+          };
+        })
+      );
+
+      console.log('Sending lineItems to backend:', lineItems); // Log the data
+  
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ lineItems }),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("Checkout failed:", errorText);
+        alert("Checkout failed. Please try again.");
+        return;
+      }
+
+      const data = await res.json();
+      router.push(data.session.url);  // Redirect to Stripe checkout session
+    } catch (error) {
+      console.error("An error occurred during checkout:", error);
+      alert(`An error occurred: ${error.message}`);
+    }
+  }
+  
 
   const portalElement = document.getElementById('portal');
 
