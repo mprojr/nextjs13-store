@@ -374,7 +374,7 @@ function StarIcon(props) {
           width="24"
           height="24"
           viewBox="0 0 24 24"
-          fill="#FFC0CB"
+          fill="#75b3c6"
           stroke="black"
           strokeWidth="1"
           strokeLinecap="round"
