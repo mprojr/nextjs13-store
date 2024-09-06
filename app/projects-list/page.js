@@ -27,7 +27,7 @@ export default async function ProjectsList() {
           ))}
         </div>
         <div className="mt-8 flex justify-center">
-          <Link href="/" className="py-4 m-2 text-[#649d9d] hover:text-[#336f6f] text-lg font-semibold">
+          <Link href="/" className="py-4 m-2 text-[#649d9d] hover:text-[#3e7c7c] text-lg font-semibold">
             Back to Home
           </Link>
         </div>

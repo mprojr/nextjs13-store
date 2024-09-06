@@ -38,7 +38,7 @@ export default function ProductCard(props) {
                 </div>
                 <button
                     onClick={onButtonClick}
-                    className='mt-4 py-2 px-4 bg-[#63adb8] text-white rounded hover:bg-blue-200'
+                    className='mt-4 py-2 px-4 bg-[#63adb8] text-white rounded hover:bg-[#3f818c] '
                 >
                     Learn More
                 </button>
